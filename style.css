@@ -1,0 +1,57 @@
+* {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+html {
+    font-size: 62.5%;
+    overflow: hidden;
+    font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro", "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "メイリオ", sans-serif;
+}
+#count-down {
+    text-align: center;
+    font-size: 12rem;
+    width: 12rem;
+    color: #FFFFFF;
+    text-shadow:2px 2px 8px #252525;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+.setting-mode {
+    background-color: rgba(255, 255, 255, 0.534);
+}
+#config {
+    font-size: 1.2rem;
+    padding: 1rem;
+    position: fixed;
+    padding-bottom: 5rem;
+    top: 1rem;
+    right: 1rem;
+    width: 30rem;
+    background-color: honeydew;
+    border: rgb(51, 87, 46) 1rem solid;
+    text-align: right;
+}
+#config input {
+    padding : 5px;
+    border: 1px solid #555;
+    width: 12rem;
+}
+#config span {
+    padding : 5px;
+    width: 15rem;
+    text-align: left;
+    display: inline-block;
+}
+
+#error {
+    background-color: red;
+    color: white;
+    text-align: left;
+    padding: 2px;
+    width: calc(100% - 4px);
+    position: absolute;
+    bottom: 1rem;
+    left: 0;
+}

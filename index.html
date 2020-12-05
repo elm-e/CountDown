@@ -1,73 +1,19 @@
 <html>
     <head>
-        <style>
-            * {
-                border: none;
-                padding: 0;
-                margin: 0;
-            }
-            html {
-                font-size: 62.5%;
-                overflow: hidden;
-                font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro", "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体", "メイリオ", sans-serif;
-            }
-            body div#count-down {
-                text-align: center;
-                font-size: 12rem;
-                color: rgb(255, 255, 255);
-                text-shadow:2px 2px 8px #252525;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="style.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://ngld.github.io/OverlayPlugin/assets/shared/common.min.js"></script>
-        <script>
-            var id = null;
-            var sec = '';
-            var span = 1000;
-            var rmTime = 5000;
-            var setTime = (s) => {
-                if (sec !== '')
-                    $('body div#count-down').text((sec / 1000).toFixed(4 - (span+"").length));
-            }
-
-            var clearTime = () => {
-                $('body div#count-down').text('');
-                sec = '';
-            }
-            
-            addOverlayListener('LogLine', (data) => {
-                if (data.line[0] == '00' && data.line[2] == '00b9') {
-                    // 戦闘開始までxx秒！
-                    sec = data.line[4].match(/\d+/);
-                    if (sec) {
-                        sec *= 1000;  // ms
-                        
-                        setTime();
-                        id = setInterval(() => {
-                            sec -= span;
-                            setTime();
-                            if (sec <= rmTime) {
-                                clearInterval(id);
-                                id = null;
-                                clearTime();
-                            }
-                        }, span);
-                    }
-                    else {
-                        console.log("Stop Countdown:", id);
-                        if (id)
-                            clearInterval(id);
-                        clearTime();
-                    }
-                }
-            });
-
-            startOverlayEvents();
-        </script>
+        <script src="./script.js"></script>
     </head>
-    <body class="resize-background">
+    <body class="">
         <div id="count-down"></div>
-    </body>
-
-    
+        <div id="config">
+            <label><span>カウントダウン間隔(ms)：</span><input name="span" type="text" value=""></label><br/>
+            <label><span>文字色：</span><input name="textColor" type="text" value=""></label><br/>
+            <label><span>隠す時間(ms)：</span><input name="rmTime" type="text" value=""></label><br/>
+            <label><span>文字サイズ：</span><input name="textSize" type="text" value=""></label><br/>
+            <label><span>影色：</span><input name="shadowColor" type="text" value=""></label><br/>
+            <div id="error">error</div>
+        </div>
+    </body>    
 </html>
