@@ -1,17 +1,5 @@
 var storage = localStorage
 var config = JSON.parse(storage.getItem('countdown_config'));
-if (config===null) {
-    console.log('Config init');
-    config = {
-        span : 1000,
-        rmTime : 5000,
-        textSize : 14,
-        textColor : "#FFFFFF",
-        shadowColor : "#802525",
-    };
-    storage.setItem('countdown_config', JSON.stringify(config));
-}
-console.log(config);
 
 var id = null;
 var saveId = null;
@@ -88,30 +76,42 @@ var setLayout = () => {
     });
 };
 
+if (config===null) {
+    console.log('Config init');
+    config = {
+        span : 1000,
+        rmTime : 5000,
+        textSize : 14,
+        textColor : "#FFFFFF",
+        shadowColor : "#802525",
+    };
+    storage.setItem('countdown_config', JSON.stringify(config));
+}
+
 addOverlayListener('LogLine', (data) => {
-    if (data.line[0] == '00' && data.line[2] == '00b9') {
+    if (data.line[0] === '00') {
+        var m = data.line[4].match(/戦闘開始まで(\d+)秒！ （/);
         // 戦闘開始までxx秒！
-        sec = data.line[4].match(/\d+/);
-        if (sec) {
-            sec *= 1000;  // ms
-            setTime();
-            id = setInterval(() => {
-                sec -= config.span;
+        if (m) {
+            sec = m[1];
+            if (sec) {
+                sec *= 1000;  // ms
                 setTime();
-            }, config.span);
+                id = setInterval(() => {
+                    sec -= config.span;
+                    setTime();
+                }, config.span);
+            }
+            else {
+                console.log("Stop Countdown:", id);
+                if (id)
+                    clearInterval(id);
+                clearTime();
+            }
+            console.log("data", data);
         }
-        else {
-            console.log("Stop Countdown:", id);
-            if (id)
-                clearInterval(id);
-            clearTime();
-        }
-        console.log("data", data);
     }
 });
-
-startOverlayEvents();
-
 
 document.addEventListener('onOverlayStateUpdate', (e) => {
     if (e.detail.isLocked) {
@@ -128,7 +128,7 @@ document.addEventListener('onOverlayStateUpdate', (e) => {
     }
 });
 
-$(function() {
+$(function () {
 
     $('#config input').on('change', function(e) {
         console.log(this, e);
@@ -143,7 +143,8 @@ $(function() {
         setTime();
     });
 
-    setLayout();
-
     $('#error').hide();
+
+    setLayout();
+    startOverlayEvents();
 });
